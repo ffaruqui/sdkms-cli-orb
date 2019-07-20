@@ -1,5 +1,4 @@
-description: |
-  Install the SDKMS CLI via pip.
+description: Install the SDKMS CLI via pip
 steps:
   - run:
        name: Install SDKMS CLI
