@@ -1,0 +1,50 @@
+commands:
+  install:
+    description: Install the SDKMS CLI via pip
+    steps:
+    - run:
+        command: |
+          export PIP=$(which pip pip3 | head -1)
+          if [[ -n $PIP ]]; then
+            if which sudo > /dev/null; then
+              sudo $PIP install sdkms-cli --upgrade
+            else
+              # This installs the SDKMS CLI to ~/.local/bin. Make sure that ~/.local/bin is in your $PATH.
+              $PIP install sdkms-cli --upgrade --user
+            fi
+          else
+            echo "Unable to install SDKMS CLI. Please install pip."
+            exit 1
+          fi
+        name: Install SDKMS CLI
+description: |
+  Install and configure Fortanix SDKMS CLI tool.  View this orb's source at - https://github.com/ffaruqui/sdkms-cli-orb
+examples:
+  example:
+    description: |
+      # What will this example document? # Descriptions should be short, simple, and clear.
+    usage:
+      jobs:
+        sdkms-cli:
+          executor: sdkms-cli/default
+          steps:
+          - checkout
+          - sdkms-cli/install
+      orbs:
+        sdkms-cli: ffaruqui_sandbox/sdkms-cli@0.0.1
+      version: 2.1
+executors:
+  executor:
+    description: The Debian-based Docker container to use when installing/configuring
+      the SDKMS CLI
+    docker:
+    - image: circleci/python:<<parameters.python-version>>-<<parameters.debian-release>>
+    parameters:
+      debian-release:
+        default: stretch
+        type: string
+      python-version:
+        default: "2.7"
+        type: string
+version: 2.1
+
