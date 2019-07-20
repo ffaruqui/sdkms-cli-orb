@@ -4,10 +4,10 @@ description: >
 usage:
       version: 2.1
       orbs:
-        sdkms-cli: ffaruqui_sandbox/sdkms-cli@0.0.1
+            sdkms-cli: ffaruqui_sandbox/sdkms-cli@0.0.1
       jobs:
-        sdkms-cli:
-          executor: sdkms-cli/default
-          steps:
-            - checkout
-            - sdkms-cli/install
+            sdkms-cli:
+                  executor: sdkms-cli/default
+                  steps:
+                        - checkout
+                        - sdkms-cli/install
