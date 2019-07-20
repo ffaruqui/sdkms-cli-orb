@@ -1,0 +1,7 @@
+version: 2.1
+
+description: >
+  Install and configure Fortanix SDKMS CLI tool. View this orb's source at - https://github.com/ffaruqui/sdkms-cli-orb
+
+orbs:
+  # if your orb will use any other orbs, you can import them here

@@ -1,0 +1,18 @@
+description: |
+  Install the SDKMS CLI via pip.
+steps:
+  - run:
+       name: Install SDKMS CLI
+       command: |
+         export PIP=$(which pip pip3 | head -1)
+         if [[ -n $PIP ]]; then
+           if which sudo > /dev/null; then
+             sudo $PIP install sdkms-cli --upgrade
+           else
+             # This installs the SDKMS CLI to ~/.local/bin. Make sure that ~/.local/bin is in your $PATH.
+             $PIP install sdkms-cli --upgrade --user
+           fi
+         else
+           echo "Unable to install SDKMS CLI. Please install pip."
+           exit 1
+         fi
