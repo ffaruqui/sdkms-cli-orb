@@ -1,0 +1,20 @@
+# Copyright (c) Fortanix, Inc.
+#
+#  This Source Code Form is subject to the terms of the Mozilla Public
+#  License, v. 2.0. If a copy of the MPL was not distributed with this
+#  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+description: Authenticate to SDKMS
+parameters:
+  api-endpoint:
+    type: string
+    default: "https://sdkms.fortanix.com"
+    description: "SDKMS API Endpoint"
+  api-key:
+    type: string
+    description: "SDKMS API Key"
+steps:
+  - run:
+      name: Authenticate as an app to SDKMS
+      command: |
+          sdkms-cli --api-endpoint <<parameters.api-endpoint>> app-login\
+           --api-key <<parameters.api-key>>
