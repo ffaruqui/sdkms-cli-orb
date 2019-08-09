@@ -48,21 +48,14 @@ In this example `config.yml` snippet, the required SDKMS parameter (API endpoint
 
 ```yaml
 version: 2.1
-
 orbs:
-  sdkms-cli: fortanix/sdkms-cli@0.0.1
-
-jobs:
-  sdkms-cli:
-    executor: sdkms-cli/default
-    steps:
-      - checkout
-      - sdkms-cli/install
-
+  sdkms-cli: fortanix/sdkms-cli@x.y.z
 workflows:
-  version: 2
-  sdkms-cli:
-    jobs:
-      - sdkms-cli:
-          context: sdkms
+  your-workflow:
+     jobs:
+       - sdkms-cli/get-secret-value:
+           api-endpoint: "https://sdkms.fortanix.com"
+           api-key: "SDKMS_API_KEY"
+           secret-name: "Some secret name"
+           secret-file: ""
 ```
