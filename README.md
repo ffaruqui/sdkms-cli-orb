@@ -44,7 +44,7 @@ See [this orb's listing in CircleCI's Orbs Registry](https://circleci.com/orbs/r
 
 ## Example
 
-In this example `config.yml` snippet, the required SDKMS parameter (API endpoint) and secret (API Key)  are stored, via [Contexts](https://circleci.com/docs/2.0/contexts), as environment variables in the `sdkms` context and then read as default parameter values by the `sdkms-cli` commands.
+In this example `config.yml` snippet, the required SDKMS parameter API endpoint is passed as parameter and API Key is stored as environment variable and then read as default parameter values by the `sdkms-cli` commands.
 
 ```yaml
 version: 2.1
