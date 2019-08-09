@@ -10,11 +10,12 @@ parameters:
     default: "https://sdkms.fortanix.com"
     description: "SDKMS API Endpoint"
   api-key:
-    type: string
+    type: env_var_name
+    default: "SDKMS_API_KEY"
     description: "SDKMS API Key"
 steps:
   - run:
       name: Authenticate as an app to SDKMS
       command: |
           sdkms-cli --api-endpoint <<parameters.api-endpoint>> app-login\
-           --api-key <<parameters.api-key>>
+           --api-key $<<parameters.api-key>>
