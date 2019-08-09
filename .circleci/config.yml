@@ -4,8 +4,43 @@ version: 2.1
 # release must exist; you'll need to publish manually at least once)
 # you can use scripts/publish-alpha.sh to publish a @dev:alpha release
 orbs:
-  sdkms-cli: ffaruqui_sandbox/sdkms-cli@dev:alpha
+  sdkms-cli: fortanix/sdkms-cli@dev:alpha
   orb-tools: circleci/orb-tools@8.27.3
+
+executors:
+  ci-base:
+    resource_class: small
+    docker:
+      - image: circleci/python:2.7-stretch
+jobs:
+  gettest:
+    executor: ci-base
+    steps:
+      - run: exit 0
+      - sdkms-cli/install
+      - sdkms-cli/authenticate:
+          api-endpoint: "https://sdkms.fortanix.com"
+          api-key: >
+              "YzA3ZDM2MDctODljMC00MmNlLTliMDktMDlhMGVkODVhM2
+              FkOmpib09mSUlzM3ZDZWZmY3ZYbV9OZXc="
+      - sdkms-cli/get-secret:
+          api-endpoint: "https://sdkms.fortanix.com"
+          secret-name: "ci-test-secret"
+          secret-file: ""
+      - sdkms-cli/logout
+
+# yaml anchor filters
+integration-dev_filters: &integration-dev_filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /integration-.*/
+
+integration-master_filters: &integration-master_filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /master-.*/
 
 workflows:
   # this `lint-pack_validate_publish-dev` workflow will run on any commit
@@ -26,7 +61,7 @@ workflows:
       # store CIRCLE_TOKEN as a project env var or Contexts resource
       # if using Contexts, add your context below
       - orb-tools/publish-dev:
-          orb-name: ffaruqui_sandbox/sdkms-cli
+          orb-name: fortanix/sdkms-cli
           requires:
             - orb-tools/pack
 
@@ -36,7 +71,7 @@ workflows:
       # key in CircleCI via SSH Permissions, with github.com as Hostname)
       - orb-tools/trigger-integration-workflow:
           name: trigger-integration-dev
-          ssh-fingerprints: 54:65:d5:14:56:74:57:e4:b2:b6:23:9b:52:ec:d4:9c
+          ssh-fingerprints: d5:3f:13:e2:db:51:c3:65:60:87:26:e2:08:98:9e:67
           requires:
             - orb-tools/publish-dev
           filters:
@@ -48,13 +83,20 @@ workflows:
       - orb-tools/trigger-integration-workflow:
           name: trigger-integration-master
           cleanup-tags: true
-          ssh-fingerprints: 54:65:d5:14:56:74:57:e4:b2:b6:23:9b:52:ec:d4:9c
+          ssh-fingerprints: d5:3f:13:e2:db:51:c3:65:60:87:26:e2:08:98:9e:67
           tag: master
           requires:
             - orb-tools/publish-dev
           filters:
             branches:
               only: master
+
+  integration_tests-prod_deploy:
+    jobs:
+      # triggered by non-master branch commits
+      - gettest:
+          name: gettest-dev
+          filters: *integration-dev_filters
 
   # this `integration-tests_prod-release` workflow will ignore commits
   # it is only triggered by git tags, which are created in the job above
@@ -108,16 +150,3 @@ workflows:
   #             ignore: /.*/
   #           tags:
   #             only: /master-major.*/
-
-# yaml anchor filters
-integration-dev_filters: &integration-dev_filters
-  branches:
-    ignore: /.*/
-  tags:
-    only: /integration-.*/
-
-integration-master_filters: &integration-master_filters
-  branches:
-    ignore: /.*/
-  tags:
-    only: /master-.*/
