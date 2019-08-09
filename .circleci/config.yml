@@ -20,9 +20,7 @@ jobs:
       - sdkms-cli/install
       - sdkms-cli/authenticate:
           api-endpoint: "https://sdkms.fortanix.com"
-          api-key: >
-              "YzA3ZDM2MDctODljMC00MmNlLTliMDktMDlhMGVkODVhM2
-              FkOmpib09mSUlzM3ZDZWZmY3ZYbV9OZXc="
+          api-key: "SDKMS_API_KEY"
       - sdkms-cli/get-secret:
           api-endpoint: "https://sdkms.fortanix.com"
           secret-name: "ci-test-secret"
@@ -91,62 +89,61 @@ workflows:
             branches:
               only: master
 
-  integration_tests-prod_deploy:
+  # this `integration-tests_prod-release` workflow will ignore commits
+  # it is only triggered by git tags, which are created in the job above
+  integration-tests_prod-release:
     jobs:
-      # triggered by non-master branch commits
       - gettest:
           name: gettest-dev
           filters: *integration-dev_filters
+      - gettest:
+          name: gettest-master
+          filters: *integration-master_filters
+      # - your integration test jobs go here
+      # - you will want to call each integration testing job twice,
+      # - each under a different name:
+      # - once, for integration tests triggered by non-master-branch commits
+      # - and again, for tests triggered by commits to master
+      # - only commits to master should potentially trigger a prod release
 
-  # this `integration-tests_prod-release` workflow will ignore commits
-  # it is only triggered by git tags, which are created in the job above
-  # integration-tests_prod-release:
-  #   jobs:
-  #     # - your integration test jobs go here
-  #     # - you will want to call each integration testing job twice,
-  #     # - each under a different name:
-  #     # - once, for integration tests triggered by non-master-branch commits
-  #     # - and again, for tests triggered by commits to master
-  #     # - only commits to master should potentially trigger a prod release
+      # patch, minor, or major publishing
+      - orb-tools/dev-promote-prod:
+          name: dev-promote-patch
+          orb-name: circleci/orb-tools
+          ssh-fingerprints: d5:3f:13:e2:db:51:c3:65:60:87:26:e2:08:98:9e:67
+          cleanup-tags: true
+          requires:
+            - gettest-master
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /master-patch.*/
 
-  #     # patch, minor, or major publishing
-  #     - orb-tools/dev-promote-prod:
-  #         name: dev-promote-patch
-  #         orb-name: circleci/orb-tools
-  #         ssh-fingerprints: # your SSH key fingerprint
-  #         cleanup-tags: true
-  #         requires:
-  #           # - your integration testing jobs go here
-  #         filters:
-  #           branches:
-  #             ignore: /.*/
-  #           tags:
-  #             only: /master-patch.*/
+      - orb-tools/dev-promote-prod:
+          name: dev-promote-minor
+          release: minor
+          orb-name: circleci/orb-tools
+          ssh-fingerprints: d5:3f:13:e2:db:51:c3:65:60:87:26:e2:08:98:9e:67
+          cleanup-tags: true
+          requires:
+            - gettest-master
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /master-minor.*/
 
-  #     - orb-tools/dev-promote-prod:
-  #         name: dev-promote-minor
-  #         release: minor
-  #         orb-name: circleci/orb-tools
-  #         ssh-fingerprints: # your SSH key fingerprint
-  #         cleanup-tags: true
-  #         requires:
-  #           # - your integration testing jobs go here
-  #         filters:
-  #           branches:
-  #             ignore: /.*/
-  #           tags:
-  #             only: /master-minor.*/
-
-  #     - orb-tools/dev-promote-prod:
-  #         name: dev-promote-major
-  #         release: major
-  #         orb-name: circleci/orb-tools
-  #         ssh-fingerprints: # your SSH key fingerprint
-  #         cleanup-tags: true
-  #         requires:
-  #           # - your integration testing jobs go here
-  #         filters:
-  #           branches:
-  #             ignore: /.*/
-  #           tags:
-  #             only: /master-major.*/
+      - orb-tools/dev-promote-prod:
+          name: dev-promote-major
+          release: major
+          orb-name: circleci/orb-tools
+          ssh-fingerprints: d5:3f:13:e2:db:51:c3:65:60:87:26:e2:08:98:9e:67
+          cleanup-tags: true
+          requires:
+            - gettest-master
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /master-major.*/
