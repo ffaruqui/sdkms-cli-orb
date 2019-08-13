@@ -6,5 +6,5 @@
 version: 2.1
 
 description: >
-  Use Fortanix SDKMS for secrets management. \
+  Use Fortanix SDKMS for your secrets management needs. \
   View this orb's source at https://github.com/fortanix/sdkms-cli-orb
