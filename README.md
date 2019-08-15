@@ -1,3 +1,29 @@
+# Description
+
+An orb for using Fortanix SDKMS for your secrets, key management and cryptographic needs in your CircleCI jobs.
+
+## Usage
+
+See [this orb's listing in CircleCI's Orbs Registry](https://circleci.com/orbs/registry/orb/ffaruqui_sandbox/sdkms-cli) for details on usage, or see below example:
+
+## Example
+
+In this example `config.yml` snippet, the required SDKMS parameter API endpoint is passed as parameter and API Key is stored as environment variable and then read as default parameter values by the `sdkms-cli` commands.
+
+```yaml
+version: 2.1
+orbs:
+  sdkms-cli: fortanix/sdkms-cli@x.y.z
+workflows:
+  your-workflow:
+     jobs:
+       - sdkms-cli/get-secret-value:
+           api-endpoint: "https://sdkms.fortanix.com"
+           api-key: "SDKMS_API_KEY"
+           secret-name: "Some secret name"
+           secret-file: ""
+```
+
 # Contributing
 
 We gratefully accept bug reports and contributions from the community.
@@ -33,29 +59,3 @@ this project or the open source license(s) involved.
 # License
 
 This project is primarily distributed under the terms of the Mozilla Public License (MPL) 2.0, see [LICENSE](./LICENSE) for details.
-
-# Description
-
-An orb for using Fortanix SDKMS for your secrets, key management and cryptographic needs in your CircleCI jobs.
-
-## Usage
-
-See [this orb's listing in CircleCI's Orbs Registry](https://circleci.com/orbs/registry/orb/ffaruqui_sandbox/sdkms-cli) for details on usage, or see below example:
-
-## Example
-
-In this example `config.yml` snippet, the required SDKMS parameter API endpoint is passed as parameter and API Key is stored as environment variable and then read as default parameter values by the `sdkms-cli` commands.
-
-```yaml
-version: 2.1
-orbs:
-  sdkms-cli: fortanix/sdkms-cli@x.y.z
-workflows:
-  your-workflow:
-     jobs:
-       - sdkms-cli/get-secret-value:
-           api-endpoint: "https://sdkms.fortanix.com"
-           api-key: "SDKMS_API_KEY"
-           secret-name: "Some secret name"
-           secret-file: ""
-```
