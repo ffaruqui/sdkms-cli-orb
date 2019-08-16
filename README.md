@@ -4,7 +4,7 @@ An orb for using Fortanix SDKMS for your secrets, key management and cryptograph
 
 ## Usage
 
-See [this orb's listing in CircleCI's Orbs Registry](https://circleci.com/orbs/registry/orb/ffaruqui_sandbox/sdkms-cli) for details on usage, or see below example:
+See [this orb's listing in CircleCI's Orbs Registry](https://circleci.com/orbs/registry/orb/fortanix/sdkms-cli) for details on usage, or see below example:
 
 ## Example
 
