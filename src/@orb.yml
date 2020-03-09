@@ -5,7 +5,9 @@
 #  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 version: 2.1
 
-description: >
-  An orb for using Fortanix SDKMS for your secrets, \
-  key management and cryptographic needs in your CircleCI jobs. \
-  View this orb's source at https://github.com/fortanix/sdkms-cli-orb
+description: |
+  Fortanix SDKMS for your secrets, key management and cryptographic needs in your CircleCI jobs.
+
+display:
+  source_url: https://github.com/fortanix/sdkms-cli-orb
+  home_url: https://fortanix.com/
